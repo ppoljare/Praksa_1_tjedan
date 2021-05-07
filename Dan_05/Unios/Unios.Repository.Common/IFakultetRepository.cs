@@ -7,11 +7,11 @@ namespace Unios.Repository.Common
 {
     public interface IFakultetRepository
     {
-        Task<int> Add(FakultetInput fakultet);
-        Task<int> Delete(Guid id);
-        Task<bool> Find(Guid id);
-        Task<List<FakultetEntity>> GetAll();
-        Task<Fakultet> Get(Guid id);
-        Task<int> Update(Guid id, FakultetInput fakultet);
+        Task<int> AddAsync(FakultetInput fakultet);
+        Task<int> DeleteAsync(Guid id);
+        Task<bool> FindAsync(Guid id);
+        Task<List<FakultetEntity>> GetAllAsync();
+        Task<Fakultet> GetAsync(Guid id);
+        Task<int> UpdateAsync(Guid id, FakultetInput fakultet);
     }
 }

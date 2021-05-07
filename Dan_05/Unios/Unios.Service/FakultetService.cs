@@ -16,37 +16,37 @@ namespace Unios.Service
             Repository = new FakultetRepository();
         }
 
-        public async Task<int> Add(FakultetInput fakultet)
+        public async Task<int> AddAsync(FakultetInput fakultet)
         {
-            return await Repository.Add(fakultet);
+            return await Repository.AddAsync(fakultet);
         }
 
-        public async Task<int> Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
-            if (await Repository.Find(id) == false)
+            if (await Repository.FindAsync(id) == false)
             {
                 return -204;
             }
-            return await Repository.Delete(id);
+            return await Repository.DeleteAsync(id);
         }
 
-        public async Task<List<FakultetEntity>> Get()
+        public async Task<List<FakultetEntity>> GetAsync()
         {
-            return await Repository.GetAll();
+            return await Repository.GetAllAsync();
         }
 
-        public async Task<Fakultet> Get(Guid id)
+        public async Task<Fakultet> GetAsync(Guid id)
         {
-            return await Repository.Get(id);
+            return await Repository.GetAsync(id);
         }
 
-        public async Task<int> Update(Guid id, FakultetInput fakultet)
+        public async Task<int> UpdateAsync(Guid id, FakultetInput fakultet)
         {
-            if (await Repository.Find(id) == false)
+            if (await Repository.FindAsync(id) == false)
             {
                 return -404;
             }
-            return await Repository.Update(id, fakultet);
+            return await Repository.UpdateAsync(id, fakultet);
         }
     }
 }

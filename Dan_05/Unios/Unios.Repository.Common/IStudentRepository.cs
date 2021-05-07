@@ -7,11 +7,11 @@ namespace Unios.Repository.Common
 {
     public interface IStudentRepository
     {
-        Task<int> Add(StudentInput student);
-        Task<int> Delete(Guid id);
-        Task<bool> Find(Guid id);
-        Task<List<Student>> GetAll();
-        Task<Student> Get(Guid id);
-        Task<int> Update(Guid id, StudentInput student);
+        Task<int> AddAsync(StudentInput student);
+        Task<int> DeleteAsync(Guid id);
+        Task<bool> FindAsync(Guid id);
+        Task<List<Student>> GetAllAsync();
+        Task<Student> GetAsync(Guid id);
+        Task<int> UpdateAsync(Guid id, StudentInput student);
     }
 }

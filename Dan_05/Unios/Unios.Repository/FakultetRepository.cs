@@ -10,11 +10,11 @@ namespace Unios.Repository
 {
     public class FakultetRepository : IFakultetRepository
     {
-        private static string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         private readonly SqlConnection Connection = new SqlConnection(_connectionString);
 
 
-        public async Task<int> Add(FakultetInput fakultet)
+        public async Task<int> AddAsync(FakultetInput fakultet)
         {
             string nonQueryString =
                 "INSERT INTO Fakultet (Naziv) VALUES ('" +
@@ -38,7 +38,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<int> Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             string nonQueryString =
                 "DELETE FROM Fakultet " +
@@ -62,7 +62,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<bool> Find(Guid id)
+        public async Task<bool> FindAsync(Guid id)
         {
             string queryString =
                 "SELECT FakultetID " +
@@ -84,7 +84,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<List<FakultetEntity>> GetAll()
+        public async Task<List<FakultetEntity>> GetAllAsync()
         {
             List<FakultetEntity> storage = new List<FakultetEntity>();
             
@@ -113,7 +113,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<Fakultet> Get(Guid id)
+        public async Task<Fakultet> GetAsync(Guid id)
         {
             Fakultet fakultet;
             Student student;
@@ -167,7 +167,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<int> Update(Guid id, FakultetInput fakultet)
+        public async Task<int> UpdateAsync(Guid id, FakultetInput fakultet)
         {
             string nonQueryString =
                 "UPDATE Fakultet " +

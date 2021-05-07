@@ -10,11 +10,11 @@ namespace Unios.Repository
 {
     public class StudentRepository : IStudentRepository
     {
-        private static string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         private readonly SqlConnection Connection = new SqlConnection(_connectionString);
 
 
-        public async Task<int> Add(StudentInput student)
+        public async Task<int> AddAsync(StudentInput student)
         {
             string nonQueryString =
                 "INSERT INTO Student (FakultetID, Ime, Prezime) VALUES ('" +
@@ -40,7 +40,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<int> Delete(Guid id)
+        public async Task<int> DeleteAsync(Guid id)
         {
             string nonQueryString =
                 "DELETE FROM Student " +
@@ -64,7 +64,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<bool> Find(Guid id)
+        public async Task<bool> FindAsync(Guid id)
         {
             string queryString =
                 "SELECT StudentID " +
@@ -86,7 +86,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<List<Student>> GetAll()
+        public async Task<List<Student>> GetAllAsync()
         {
             List<Student> storage = new List<Student>();
 
@@ -118,7 +118,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<Student> Get(Guid id)
+        public async Task<Student> GetAsync(Guid id)
         {
             Student student;
 
@@ -153,7 +153,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<int> Update(Guid id, StudentInput student)
+        public async Task<int> UpdateAsync(Guid id, StudentInput student)
         {
             string nonQueryString =
                 "UPDATE Student " +

@@ -14,11 +14,11 @@ namespace Unios.WebApi.Controllers
         public static FakultetService Service = new FakultetService();
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Get()
+        public async Task<HttpResponseMessage> GetAsync()
         {
             try
             {
-                List<FakultetEntity> fakultets = await Service.Get();
+                List<FakultetEntity> fakultets = await Service.GetAsync();
                 return Request.CreateResponse(HttpStatusCode.OK, fakultets);
             }
             catch (Exception ex)
@@ -28,11 +28,11 @@ namespace Unios.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Get(Guid id)
+        public async Task<HttpResponseMessage> GetAsync(Guid id)
         {
             try
             {
-                Fakultet fakultet = await Service.Get(id);
+                Fakultet fakultet = await Service.GetAsync(id);
 
                 if (fakultet != null)
                 {
@@ -50,11 +50,11 @@ namespace Unios.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> Post([FromBody] FakultetInput value)
+        public async Task<HttpResponseMessage> PostAsync([FromBody] FakultetInput value)
         {
             try
             {
-                int errm = await Service.Add(value);
+                int errm = await Service.AddAsync(value);
                 switch (errm)
                 {
                     case 0:
@@ -72,11 +72,11 @@ namespace Unios.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<HttpResponseMessage> Put(Guid id, [FromBody] FakultetInput value)
+        public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] FakultetInput value)
         {
             try
             {
-                int errm = await Service.Update(id, value);
+                int errm = await Service.UpdateAsync(id, value);
                 switch (errm)
                 {
                     case 0:
@@ -94,11 +94,11 @@ namespace Unios.WebApi.Controllers
         }
 
         [HttpDelete]
-        public async Task<HttpResponseMessage> Delete(Guid id)
+        public async Task<HttpResponseMessage> DeleteAsync(Guid id)
         {
             try
             {
-                int errm = await Service.Delete(id);
+                int errm = await Service.DeleteAsync(id);
                 switch (errm)
                 {
                     case 0:
