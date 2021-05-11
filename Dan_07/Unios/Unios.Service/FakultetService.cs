@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unios.Model;
 using Unios.Model.Common;
-using Unios.Repository;
+using Unios.Repository.Common;
 using Unios.Service.Common;
 
 namespace Unios.Service
 {
     public class FakultetService : IFakultetService
     {
-        protected FakultetRepository Repository { get; private set; }
+        protected IFakultetRepository Repository { get; private set; }
 
-        public FakultetService()
+        public FakultetService(IFakultetRepository repository)
         {
-            Repository = new FakultetRepository();
+            Repository = repository;
         }
 
         public async Task<IFakultetEntity> AddAsync(FakultetInput input)

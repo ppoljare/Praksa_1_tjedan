@@ -46,6 +46,9 @@
     <Reference Include="Autofac, Version=6.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.6.2.0\lib\netstandard2.0\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac.Integration.WebApi, Version=6.0.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.WebApi2.6.0.1\lib\net472\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -109,6 +112,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContainerConfig.cs" />
     <Compile Include="Controllers\FakultetController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Global.asax.cs">

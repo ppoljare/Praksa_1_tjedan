@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unios.Model;
 using Unios.Model.Common;
 
 namespace Unios.Repository.Common

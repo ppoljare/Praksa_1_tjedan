@@ -29,12 +29,10 @@ D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_05\Unios\Unios.Service
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Service.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Service.pdb
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Model.dll
-D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Repository.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Service.Common.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Model.Common.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Repository.Common.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Model.pdb
-D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Repository.pdb
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Service.Common.pdb
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Model.Common.pdb
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Repository.Common.pdb
@@ -54,7 +52,6 @@ D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\System.Threading.Tasks.Extensions.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Model.Common.dll.config
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Model.dll.config
-D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Repository.dll.config
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Unios.Service.Common.dll.config
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Autofac.pdb
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_07\Unios\Unios.Service\bin\Debug\Autofac.xml

@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unios.Model;
 using Unios.Model.Common;
-using Unios.Repository;
+using Unios.Repository.Common;
 using Unios.Service.Common;
 
 namespace Unios.Service
 {
     public class StudentService : IStudentService
     {
-        protected StudentRepository Repository { get; private set; }
+        protected IStudentRepository Repository { get; private set; }
         
-        public StudentService()
+        public StudentService(IStudentRepository repository)
         {
-            Repository = new StudentRepository();
+            Repository = repository;
         }
 
         public async Task<IStudentEntity> AddAsync(StudentInput input)

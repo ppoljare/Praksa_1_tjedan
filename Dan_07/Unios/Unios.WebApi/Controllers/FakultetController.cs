@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Unios.Model;
 using Unios.Model.Common;
-using Unios.Service;
+using Unios.Service.Common;
 
 namespace Unios.WebApi.Controllers
 {
     public class FakultetController : ApiController
     {
-        public static FakultetService Service = new FakultetService();
+        protected IFakultetService Service { get; private set; }
+
+        public FakultetController(IFakultetService service)
+        {
+            Service = service;
+        }
 
         [HttpGet]
         public async Task<HttpResponseMessage> GetAsync()

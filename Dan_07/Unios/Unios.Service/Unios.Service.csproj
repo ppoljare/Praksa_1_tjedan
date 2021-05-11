@@ -79,9 +79,9 @@
       <Project>{1792b372-7ad4-41ba-92b2-509f07239f1c}</Project>
       <Name>Unios.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Unios.Repository\Unios.Repository.csproj">
-      <Project>{91888d27-6b4b-4568-b78f-ebe562c5cc15}</Project>
-      <Name>Unios.Repository</Name>
+    <ProjectReference Include="..\Unios.Repository.Common\Unios.Repository.Common.csproj">
+      <Project>{c9b5bfe9-e02c-4d65-8765-f19a0e9913e3}</Project>
+      <Name>Unios.Repository.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Unios.Service.Common\Unios.Service.Common.csproj">
       <Project>{11c284c9-8a8d-4e62-ac86-bcd563636116}</Project>
