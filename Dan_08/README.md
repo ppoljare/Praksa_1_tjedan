@@ -1,0 +1,1 @@
+Baza je malo izmijenjena (dodano je nekoliko stupaca) zato što nisam imao baš puno opcija za filtriranje i sortiranje.
