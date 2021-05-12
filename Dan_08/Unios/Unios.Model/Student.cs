@@ -22,10 +22,5 @@ namespace Unios.Model
             Godina = godina;
             Found = true;
         }
-
-        public Student(bool found)
-        {
-            Found = found;
-        }
     }
 }

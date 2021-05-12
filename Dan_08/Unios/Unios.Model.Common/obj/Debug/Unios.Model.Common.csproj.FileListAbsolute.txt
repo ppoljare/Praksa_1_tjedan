@@ -54,3 +54,5 @@ D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Model.C
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Model.Common\obj\Debug\Unios.Model.Common.csproj.CopyComplete
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Model.Common\obj\Debug\Unios.Model.Common.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Model.Common\obj\Debug\Unios.Model.Common.pdb
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Model.Common\bin\Debug\Unios.Common.dll
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Model.Common\bin\Debug\Unios.Common.pdb

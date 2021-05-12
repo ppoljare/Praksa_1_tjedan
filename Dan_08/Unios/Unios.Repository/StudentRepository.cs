@@ -8,6 +8,7 @@ using Unios.Model.Common;
 using Unios.Repository.Common;
 using Unios.Repository.Entities;
 using System.Threading.Tasks;
+using Unios.Common;
 
 namespace Unios.Repository
 {
@@ -76,7 +77,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<List<IStudent>> FindAsync()
+        public async Task<List<IStudent>> FindAsync(StudentSortingParams sortingParams)
         {
             List<IStudent> storage = new List<IStudent>();
 
@@ -84,6 +85,11 @@ namespace Unios.Repository
                 "SELECT StudentID, Ime, Prezime, Naziv, Godina " +
                 "FROM Student JOIN Fakultet " +
                 "ON (Student.FakultetID = Fakultet.FakultetID)";
+
+            if (!sortingParams.IsNull())
+            {
+                queryString += " ORDER BY " + sortingParams.SortBy + " " + sortingParams.SortOrder.ToUpper();
+            }
 
             SqlCommand comm = new SqlCommand(queryString, Connection);
 

@@ -52,11 +52,8 @@ D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\System.Threading.Tasks.Extensions.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Unios.Model.Common.dll
-D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Unios.Model.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Unios.Model.Common.pdb
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Unios.Model.Common.dll.config
-D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Unios.Model.pdb
-D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Unios.Model.dll.config
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Autofac.pdb
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Autofac.xml
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
@@ -71,3 +68,5 @@ D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\obj\Debug\Unios.Service.Common.csproj.CopyComplete
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\obj\Debug\Unios.Service.Common.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\obj\Debug\Unios.Service.Common.pdb
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Unios.Common.dll
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Service.Common\bin\Debug\Unios.Common.pdb

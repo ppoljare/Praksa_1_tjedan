@@ -362,3 +362,5 @@ D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.WebApi\
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.WebApi\obj\Debug\Unios.WebApi.csproj.CopyComplete
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.WebApi\obj\Debug\Unios.WebApi.dll
 D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.WebApi\obj\Debug\Unios.WebApi.pdb
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.WebApi\bin\Unios.Common.dll
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.WebApi\bin\Unios.Common.pdb

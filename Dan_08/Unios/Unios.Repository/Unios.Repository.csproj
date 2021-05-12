@@ -97,6 +97,10 @@
     <Compile Include="StudentRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Unios.Common\Unios.Common.csproj">
+      <Project>{6866fb30-ef07-401b-ae2f-dc51d11d4a26}</Project>
+      <Name>Unios.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Unios.Model.Common\Unios.Model.Common.csproj">
       <Project>{1ce3eac4-bc61-4c76-ad07-9ff9be88404d}</Project>
       <Name>Unios.Model.Common</Name>

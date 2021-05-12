@@ -11,10 +11,5 @@ namespace Unios.Model
         public string Vrsta { get; set; }
         public List<IStudent> Studenti { get; set; }
         public bool Found { get; set; }
-
-        public Fakultet(bool found)
-        {
-            Found = found;
-        }
     }
 }

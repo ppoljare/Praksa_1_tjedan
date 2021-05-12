@@ -1,0 +1,6 @@
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Common\bin\Debug\Unios.Common.dll
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Common\bin\Debug\Unios.Common.pdb
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Common\obj\Debug\Unios.Common.csprojAssemblyReference.cache
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Common\obj\Debug\Unios.Common.csproj.CoreCompileInputs.cache
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Common\obj\Debug\Unios.Common.dll
+D:\root\MathOS\3. godina\6. semestar\Praksa\1. tjedan\Dan_08\Unios\Unios.Common\obj\Debug\Unios.Common.pdb

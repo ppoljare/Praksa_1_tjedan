@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Unios.Common;
 using Unios.Model.Common;
 using Unios.Service.Common;
 using Unios.WebApi.Models;
@@ -21,16 +22,27 @@ namespace Unios.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> FindAsync()
+        public async Task<HttpResponseMessage> FindAsync([FromUri]FakultetSortingParams sortingParams)
         {
             var config = new MapperConfiguration(cfg =>
                 cfg.CreateMap<IFakultet, FakultetViewModel>()
             );
             var mapper = new Mapper(config);
 
+            if (!sortingParams.IsValid())
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid sorting parameters!");
+            }
+
             try
             {
-                List<IFakultet> serviceResult = await Service.FindAsync();
+                List<IFakultet> serviceResult = await Service.FindAsync(sortingParams);
+
+                if (serviceResult == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NoContent);
+                }
+
                 var fakultetsView = mapper.Map<List<FakultetViewModel>>(serviceResult);
                 return Request.CreateResponse(HttpStatusCode.OK, fakultetsView);
             }

@@ -74,5 +74,11 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Unios.Common\Unios.Common.csproj">
+      <Project>{6866fb30-ef07-401b-ae2f-dc51d11d4a26}</Project>
+      <Name>Unios.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

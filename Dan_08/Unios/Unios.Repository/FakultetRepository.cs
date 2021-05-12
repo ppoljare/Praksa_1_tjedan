@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Unios.Common;
 using Unios.Model;
 using Unios.Model.Common;
 using Unios.Repository.Common;
@@ -72,7 +73,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<List<IFakultet>> FindAsync()
+        public async Task<List<IFakultet>> FindAsync(FakultetSortingParams sortingParams)
         {
             var config = new MapperConfiguration(cfg =>
                 cfg.CreateMap<FakultetEntity, IFakultet>()
@@ -84,6 +85,11 @@ namespace Unios.Repository
             string queryString =
                 "SELECT FakultetID, Naziv, Vrsta " +
                 "FROM Fakultet";
+
+            if (!sortingParams.IsNull())
+            {
+                queryString += " ORDER BY " + sortingParams.SortBy + " " + sortingParams.SortOrder.ToUpper();
+            }
 
             SqlCommand comm = new SqlCommand(queryString, Connection);
 

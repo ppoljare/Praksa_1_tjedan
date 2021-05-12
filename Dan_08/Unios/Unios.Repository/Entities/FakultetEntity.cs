@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Unios.Model
+namespace Unios.Repository.Entities
 {
     public class FakultetEntity
     {

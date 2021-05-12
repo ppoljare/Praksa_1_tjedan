@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unios.Model;
+using Unios.Common;
 using Unios.Model.Common;
 using Unios.Repository.Common;
 using Unios.Service.Common;
@@ -35,9 +35,9 @@ namespace Unios.Service
             return await Repository.DeleteAsync(id);
         }
 
-        public async Task<List<IStudent>> FindAsync()
+        public async Task<List<IStudent>> FindAsync(StudentSortingParams sortingParams)
         {
-            return await Repository.FindAsync();
+            return await Repository.FindAsync(sortingParams);
         }
 
         public async Task<IStudent> GetAsync(Guid id)
@@ -49,7 +49,8 @@ namespace Unios.Service
         {
             if (await Repository.GetAsync(student.StudentID) == null)
             {
-                return new Student(false);
+                student.Found = false;
+                return student;
             }
 
             return await Repository.UpdateAsync(student);

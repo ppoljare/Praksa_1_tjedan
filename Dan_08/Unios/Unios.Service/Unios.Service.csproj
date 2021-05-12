@@ -72,13 +72,13 @@
     <Compile Include="StudentService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Unios.Common\Unios.Common.csproj">
+      <Project>{6866fb30-ef07-401b-ae2f-dc51d11d4a26}</Project>
+      <Name>Unios.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Unios.Model.Common\Unios.Model.Common.csproj">
       <Project>{1ce3eac4-bc61-4c76-ad07-9ff9be88404d}</Project>
       <Name>Unios.Model.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Unios.Model\Unios.Model.csproj">
-      <Project>{1792b372-7ad4-41ba-92b2-509f07239f1c}</Project>
-      <Name>Unios.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\Unios.Repository.Common\Unios.Repository.Common.csproj">
       <Project>{c9b5bfe9-e02c-4d65-8765-f19a0e9913e3}</Project>
