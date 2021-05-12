@@ -10,7 +10,10 @@ namespace Unios.Repository.Common
     {
         Task<IFakultet> AddAsync(IFakultet fakultet);
         Task<int> DeleteAsync(Guid id);
-        Task<List<IFakultet>> FindAsync(FakultetSortingParams sortingParams);
+        Task<List<IFakultet>> FindAsync(
+            FakultetFilteringParams filteringParams,
+            FakultetSortingParams sortingParams
+        );
         Task<IFakultet> GetAsync(Guid id);
         Task<IFakultet> UpdateAsync(IFakultet fakultet);
     }

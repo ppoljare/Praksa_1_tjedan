@@ -22,7 +22,10 @@ namespace Unios.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> FindAsync([FromUri]StudentSortingParams sortingParams)
+        public async Task<HttpResponseMessage> FindAsync(
+            [FromUri]StudentFilteringParams filteringParams,
+            [FromUri]StudentSortingParams sortingParams
+        )
         {
             var config = new MapperConfiguration(cfg =>
                 cfg.CreateMap<IStudent, StudentViewModel>()
@@ -36,7 +39,7 @@ namespace Unios.WebApi.Controllers
 
             try
             {
-                List<IStudent> serviceResult = await Service.FindAsync(sortingParams);
+                List<IStudent> serviceResult = await Service.FindAsync(filteringParams, sortingParams);
 
                 if (serviceResult == null)
                 {

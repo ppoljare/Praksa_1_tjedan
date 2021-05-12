@@ -73,7 +73,10 @@ namespace Unios.Repository
         }
 
 
-        public async Task<List<IFakultet>> FindAsync(FakultetSortingParams sortingParams)
+        public async Task<List<IFakultet>> FindAsync(
+            FakultetFilteringParams filteringParams,
+            FakultetSortingParams sortingParams
+        )
         {
             var config = new MapperConfiguration(cfg =>
                 cfg.CreateMap<FakultetEntity, IFakultet>()
@@ -85,6 +88,9 @@ namespace Unios.Repository
             string queryString =
                 "SELECT FakultetID, Naziv, Vrsta " +
                 "FROM Fakultet";
+
+            string filterString = GetFilterString(filteringParams);
+            queryString += filterString;
 
             if (!sortingParams.IsNull())
             {
@@ -209,6 +215,35 @@ namespace Unios.Repository
             Connection.Close();
             fakultet.Found = true;
             return fakultet;
+        }
+
+
+        private string GetFilterString(FakultetFilteringParams filteringParams)
+        {
+            string filterString = "";
+            int counter = 0;
+
+            if (filteringParams.Naziv != null)
+            {
+                counter++;
+                filterString = " WHERE ";
+                filterString += "LOWER(Naziv) LIKE '%" + filteringParams.Naziv.ToLower() + "%'";
+            }
+
+            if (filteringParams.Vrsta != null)
+            {
+                if (counter == 0)
+                {
+                    filterString = " WHERE ";
+                }
+                else
+                {
+                    filterString += " AND ";
+                }
+                filterString += "LOWER(Vrsta) LIKE '%" + filteringParams.Vrsta.ToLower() + "%'";
+            }
+
+            return filterString;
         }
     }
 }

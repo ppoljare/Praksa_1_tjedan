@@ -35,9 +35,12 @@ namespace Unios.Service
             return await Repository.DeleteAsync(id);
         }
 
-        public async Task<List<IStudent>> FindAsync(StudentSortingParams sortingParams)
+        public async Task<List<IStudent>> FindAsync(
+            StudentFilteringParams filteringParams,
+            StudentSortingParams sortingParams
+        )
         {
-            return await Repository.FindAsync(sortingParams);
+            return await Repository.FindAsync(filteringParams, sortingParams);
         }
 
         public async Task<IStudent> GetAsync(Guid id)

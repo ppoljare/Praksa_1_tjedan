@@ -35,9 +35,12 @@ namespace Unios.Service
             return await Repository.DeleteAsync(id);
         }
 
-        public async Task<List<IFakultet>> FindAsync(FakultetSortingParams sortingParams)
+        public async Task<List<IFakultet>> FindAsync(
+            FakultetFilteringParams filteringParams,
+            FakultetSortingParams sortingParams
+        )
         {
-            return await Repository.FindAsync(sortingParams);
+            return await Repository.FindAsync(filteringParams, sortingParams);
         }
 
         public async Task<IFakultet> GetAsync(Guid id)

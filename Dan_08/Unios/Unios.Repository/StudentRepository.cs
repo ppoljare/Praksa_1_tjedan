@@ -77,7 +77,10 @@ namespace Unios.Repository
         }
 
 
-        public async Task<List<IStudent>> FindAsync(StudentSortingParams sortingParams)
+        public async Task<List<IStudent>> FindAsync(
+            StudentFilteringParams filteringParams,
+            StudentSortingParams sortingParams
+        )
         {
             List<IStudent> storage = new List<IStudent>();
 
@@ -85,6 +88,9 @@ namespace Unios.Repository
                 "SELECT StudentID, Ime, Prezime, Naziv, Godina " +
                 "FROM Student JOIN Fakultet " +
                 "ON (Student.FakultetID = Fakultet.FakultetID)";
+
+            string filterString = GetFilterString(filteringParams);
+            queryString += filterString;
 
             if (!sortingParams.IsNull())
             {
@@ -208,6 +214,63 @@ namespace Unios.Repository
                 Connection.Close();
                 return null;
             }
+        }
+
+
+        private string GetFilterString(StudentFilteringParams filteringParams)
+        {
+            string filterString = "";
+            int counter = 0;
+            
+            if (filteringParams.Fakultet != null)
+            {
+                counter++;
+                filterString = " WHERE ";
+                filterString += "LOWER(Naziv) LIKE '%" + filteringParams.Fakultet.ToLower() + "%'";
+            }
+
+            if (filteringParams.Ime != null)
+            {
+                if (counter == 0)
+                {
+                    filterString = " WHERE ";
+                }
+                else
+                {
+                    filterString += " AND ";
+                }
+                counter++;
+                filterString += "LOWER(Ime) LIKE '%" + filteringParams.Ime.ToLower() + "%'";
+            }
+
+            if (filteringParams.Prezime != null)
+            {
+                if (counter == 0)
+                {
+                    filterString = " WHERE ";
+                }
+                else
+                {
+                    filterString += " AND ";
+                }
+                counter++;
+                filterString += "LOWER(Prezime) LIKE '%" + filteringParams.Prezime.ToLower() + "%'";
+            }
+
+            if (filteringParams.Godina != null)
+            {
+                if (counter == 0)
+                {
+                    filterString = " WHERE ";
+                }
+                else
+                {
+                    filterString += " AND ";
+                }
+                filterString += "Godina = " + filteringParams.Godina;
+            }
+
+            return filterString;
         }
     }
 }
