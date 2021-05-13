@@ -26,6 +26,11 @@ namespace Unios.Service
             return null;
         }
 
+        public async Task<int> CountAsync(StudentFilteringParams filteringParams)
+        {
+            return await Repository.CountAsync(filteringParams);
+        }
+
         public async Task<int> DeleteAsync(Guid id)
         {
             if (await Repository.GetAsync(id) == null)
@@ -37,10 +42,11 @@ namespace Unios.Service
 
         public async Task<List<IStudent>> FindAsync(
             StudentFilteringParams filteringParams,
-            StudentSortingParams sortingParams
+            StudentSortingParams sortingParams,
+            PaginationParams paginationParams
         )
         {
-            return await Repository.FindAsync(filteringParams, sortingParams);
+            return await Repository.FindAsync(filteringParams, sortingParams, paginationParams);
         }
 
         public async Task<IStudent> GetAsync(Guid id)

@@ -49,6 +49,32 @@ namespace Unios.Repository
         }
 
 
+        public async Task<int> CountAsync(FakultetFilteringParams filteringParams)
+        {
+            string queryString =
+                "SELECT COUNT(*) " +
+                "FROM Fakultet";
+
+            string filterString = GenerateFilterString(filteringParams);
+            queryString += filterString;
+
+            SqlCommand comm = new SqlCommand(queryString, Connection);
+
+            await Connection.OpenAsync();
+            SqlDataReader dataReader = await comm.ExecuteReaderAsync();
+
+            if (dataReader.Read())
+            {
+                int countRows = int.Parse(dataReader[0].ToString());
+                Connection.Close();
+                return countRows;
+            }
+
+            Connection.Close();
+            return 0;
+        }
+
+
         public async Task<int> DeleteAsync(Guid id)
         {
             string nonQueryString =
@@ -75,7 +101,8 @@ namespace Unios.Repository
 
         public async Task<List<IFakultet>> FindAsync(
             FakultetFilteringParams filteringParams,
-            FakultetSortingParams sortingParams
+            FakultetSortingParams sortingParams,
+            PaginationParams paginationParams
         )
         {
             var config = new MapperConfiguration(cfg =>
@@ -84,18 +111,24 @@ namespace Unios.Repository
             var mapper = new Mapper(config);
             
             List<FakultetEntity> storage = new List<FakultetEntity>();
-            
-            string queryString =
-                "SELECT FakultetID, Naziv, Vrsta " +
+
+            string queryString = "SELECT";
+            queryString += paginationParams.GeneratePaginationString("start");
+
+            queryString +=
+                " FakultetID, Naziv, Vrsta " +
                 "FROM Fakultet";
 
-            string filterString = GetFilterString(filteringParams);
+            string filterString = GenerateFilterString(filteringParams);
             queryString += filterString;
 
             if (!sortingParams.IsNull())
             {
                 queryString += " ORDER BY " + sortingParams.SortBy + " " + sortingParams.SortOrder.ToUpper();
             }
+
+            string paginationString = paginationParams.GeneratePaginationString("end");
+            queryString += paginationString;
 
             SqlCommand comm = new SqlCommand(queryString, Connection);
 
@@ -218,7 +251,7 @@ namespace Unios.Repository
         }
 
 
-        private string GetFilterString(FakultetFilteringParams filteringParams)
+        private string GenerateFilterString(FakultetFilteringParams filteringParams)
         {
             string filterString = "";
             int counter = 0;

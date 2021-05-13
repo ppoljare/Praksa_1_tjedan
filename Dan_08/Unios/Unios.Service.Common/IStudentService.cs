@@ -10,9 +10,11 @@ namespace Unios.Service.Common
     {
         Task<IStudent> AddAsync(IStudent student);
         Task<int> DeleteAsync(Guid id);
+        Task<int> CountAsync(StudentFilteringParams filteringParams);
         Task<List<IStudent>> FindAsync(
             StudentFilteringParams filteringParams,
-            StudentSortingParams sortingParams
+            StudentSortingParams sortingParams,
+            PaginationParams paginationParams
         );
         Task<IStudent> GetAsync(Guid id);
         Task<IStudent> UpdateAsync(IStudent student);

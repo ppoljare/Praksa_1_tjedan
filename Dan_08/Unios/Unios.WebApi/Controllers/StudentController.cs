@@ -24,13 +24,19 @@ namespace Unios.WebApi.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> FindAsync(
             [FromUri]StudentFilteringParams filteringParams,
-            [FromUri]StudentSortingParams sortingParams
+            [FromUri]StudentSortingParams sortingParams,
+            [FromUri]PaginationParams paginationParams
         )
         {
             var config = new MapperConfiguration(cfg =>
                 cfg.CreateMap<IStudent, StudentViewModel>()
             );
             var mapper = new Mapper(config);
+
+            if (!paginationParams.IsValidParams())
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid pagination parameters!");
+            }
 
             if (!sortingParams.IsValid())
             {
@@ -39,7 +45,22 @@ namespace Unios.WebApi.Controllers
 
             try
             {
-                List<IStudent> serviceResult = await Service.FindAsync(filteringParams, sortingParams);
+                int totalItems = await Service.CountAsync(filteringParams);
+                paginationParams.SetTotalItems(totalItems);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
+            }
+
+            if (!paginationParams.IsValidPage())
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Not enough records to generate at least " + paginationParams.Page + " pages!");
+            }
+
+            try
+            {
+                List<IStudent> serviceResult = await Service.FindAsync(filteringParams, sortingParams, paginationParams);
 
                 if (serviceResult == null)
                 {

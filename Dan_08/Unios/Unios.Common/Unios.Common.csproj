@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="FakultetFilteringParams.cs" />
     <Compile Include="FakultetSortingParams.cs" />
+    <Compile Include="PaginationParams.cs" />
     <Compile Include="StudentFilteringParams.cs" />
     <Compile Include="StudentSortingParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
