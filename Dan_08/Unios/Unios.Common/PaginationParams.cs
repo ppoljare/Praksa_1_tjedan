@@ -2,7 +2,7 @@
 
 namespace Unios.Common
 {
-    public class PaginationParams
+    public class PaginationParams : IPaginationParams
     {
         public int ItemsPerPage { get; set; }
         public int Page { get; set; }
@@ -13,18 +13,19 @@ namespace Unios.Common
             TotalItems = totalItems;
         }
 
-        public bool IsValidParams()
+        public bool IsValid()
         {
-            return ItemsPerPage > 0 && Page > 0;
-        }
-
-        public bool IsValidPage()
-        {
-            if (!IsValidParams())
+            if (ItemsPerPage == 0)
             {
-                return false;
+                ItemsPerPage = 10;
             }
-            return ItemsPerPage * (Page - 1) < TotalItems;
+
+            if (Page == 0)
+            {
+                Page = 1;
+            }
+
+            return ItemsPerPage > 0 && Page > 0;
         }
 
         public int PageStart()
@@ -54,7 +55,7 @@ namespace Unios.Common
                         paginationString += " TOP " + ItemsPerPage;
                     }
                     break;
-                
+
                 case "end":
                     if (IsFirstPage())
                     {
@@ -66,7 +67,7 @@ namespace Unios.Common
                         paginationString += " FETCH NEXT " + ItemsPerPage.ToString() + " ROWS ONLY";
                     }
                     break;
-                
+
                 default:
                     break;
             }

@@ -15,10 +15,12 @@ namespace Unios.WebApi.Controllers
     public class FakultetController : ApiController
     {
         protected IFakultetService Service { get; private set; }
+        private readonly IMapper Mapper;
 
-        public FakultetController(IFakultetService service)
+        public FakultetController(IFakultetService service, IMapper mapper)
         {
             Service = service;
+            Mapper = mapper;
         }
 
         [HttpGet]
@@ -28,12 +30,7 @@ namespace Unios.WebApi.Controllers
             [FromUri]PaginationParams paginationParams
         )
         {
-            var config = new MapperConfiguration(cfg =>
-                cfg.CreateMap<IFakultet, FakultetViewModel>()
-            );
-            var mapper = new Mapper(config);
-
-            if (!paginationParams.IsValidParams())
+            if (!paginationParams.IsValid())
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid pagination parameters!");
             }
@@ -45,21 +42,6 @@ namespace Unios.WebApi.Controllers
 
             try
             {
-                int totalItems = await Service.CountAsync(filteringParams);
-                paginationParams.SetTotalItems(totalItems);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
-            }
-
-            if (!paginationParams.IsValidPage())
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Not enough records to generate at least " + paginationParams.Page + " pages!");
-            }
-
-            try
-            {
                 List<IFakultet> serviceResult = await Service.FindAsync(filteringParams, sortingParams, paginationParams);
 
                 if (serviceResult == null)
@@ -67,7 +49,7 @@ namespace Unios.WebApi.Controllers
                     return Request.CreateResponse(HttpStatusCode.NoContent);
                 }
 
-                var fakultetsView = mapper.Map<List<FakultetViewModel>>(serviceResult);
+                var fakultetsView = Mapper.Map<List<FakultetViewModel>>(serviceResult);
                 return Request.CreateResponse(HttpStatusCode.OK, fakultetsView);
             }
             catch (Exception ex)
@@ -79,19 +61,13 @@ namespace Unios.WebApi.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetAsync(Guid id)
         {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<IFakultet, FakultetAndStudentsViewModel>();
-                cfg.CreateMap<IStudent, StudentViewModel>();
-            });
-            var mapper = new Mapper(config);
-
             try
             {
                 IFakultet serviceResult = await Service.GetAsync(id);
 
                 if (serviceResult != null)
                 {
-                    var fakultetView = mapper.Map<FakultetAndStudentsViewModel>(serviceResult);
+                    var fakultetView = Mapper.Map<FakultetAndStudentsViewModel>(serviceResult);
                     return Request.CreateResponse(HttpStatusCode.OK, fakultetView);
                 }
                 else
@@ -108,13 +84,7 @@ namespace Unios.WebApi.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> PostAsync([FromBody] FakultetInputModel value)
         {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<FakultetInputModel, IFakultet>();
-                cfg.CreateMap<IFakultet, FakultetViewModel>();
-            });
-            var mapper = new Mapper(config);
-
-            var fakultet = mapper.Map<IFakultet>(value);
+            var fakultet = Mapper.Map<IFakultet>(value);
             fakultet.FakultetID = Guid.NewGuid();
 
             try
@@ -126,7 +96,7 @@ namespace Unios.WebApi.Controllers
                 }
                 else
                 {
-                    var fakultetView = mapper.Map<FakultetViewModel>(serviceResult);
+                    var fakultetView = Mapper.Map<FakultetViewModel>(serviceResult);
                     return Request.CreateResponse(HttpStatusCode.Created, fakultetView);
                 }
             }
@@ -139,13 +109,7 @@ namespace Unios.WebApi.Controllers
         [HttpPut]
         public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] FakultetInputModel value)
         {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<FakultetInputModel, IFakultet>();
-                cfg.CreateMap<IFakultet, FakultetViewModel>();
-            });
-            var mapper = new Mapper(config);
-
-            var fakultet = mapper.Map<IFakultet>(value);
+            var fakultet = Mapper.Map<IFakultet>(value);
             fakultet.FakultetID = id;
 
             try
@@ -161,7 +125,7 @@ namespace Unios.WebApi.Controllers
                 }
                 else
                 {
-                    var fakultetView = mapper.Map<FakultetViewModel>(serviceResult);
+                    var fakultetView = Mapper.Map<FakultetViewModel>(serviceResult);
                     return Request.CreateResponse(HttpStatusCode.OK, fakultetView);
                 }
             }

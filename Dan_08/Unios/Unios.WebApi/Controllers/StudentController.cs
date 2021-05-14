@@ -15,10 +15,12 @@ namespace Unios.WebApi.Controllers
     public class StudentController : ApiController
     {
         protected IStudentService Service { get; private set; }
+        private readonly IMapper Mapper;
 
-        public StudentController(IStudentService service)
+        public StudentController(IStudentService service, IMapper mapper)
         {
             Service = service;
+            Mapper = mapper;
         }
 
         [HttpGet]
@@ -28,12 +30,7 @@ namespace Unios.WebApi.Controllers
             [FromUri]PaginationParams paginationParams
         )
         {
-            var config = new MapperConfiguration(cfg =>
-                cfg.CreateMap<IStudent, StudentViewModel>()
-            );
-            var mapper = new Mapper(config);
-
-            if (!paginationParams.IsValidParams())
+            if (!paginationParams.IsValid())
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid pagination parameters!");
             }
@@ -45,21 +42,6 @@ namespace Unios.WebApi.Controllers
 
             try
             {
-                int totalItems = await Service.CountAsync(filteringParams);
-                paginationParams.SetTotalItems(totalItems);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
-            }
-
-            if (!paginationParams.IsValidPage())
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Not enough records to generate at least " + paginationParams.Page + " pages!");
-            }
-
-            try
-            {
                 List<IStudent> serviceResult = await Service.FindAsync(filteringParams, sortingParams, paginationParams);
 
                 if (serviceResult == null)
@@ -67,7 +49,7 @@ namespace Unios.WebApi.Controllers
                     return Request.CreateResponse(HttpStatusCode.NoContent);
                 }
 
-                var studentsView = mapper.Map<List<StudentViewModel>>(serviceResult);
+                var studentsView = Mapper.Map<List<StudentViewModel>>(serviceResult);
                 return Request.CreateResponse(HttpStatusCode.OK, studentsView);
             }
             catch (Exception ex)
@@ -79,18 +61,13 @@ namespace Unios.WebApi.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetAsync(Guid id)
         {
-            var config = new MapperConfiguration(cfg =>
-                cfg.CreateMap<IStudent, StudentViewModel>()
-            );
-            var mapper = new Mapper(config);
-
             try
             {
                 IStudent serviceResult = await Service.GetAsync(id);
 
                 if (serviceResult != null)
                 {
-                    var studentView = mapper.Map<StudentViewModel>(serviceResult);
+                    var studentView = Mapper.Map<StudentViewModel>(serviceResult);
                     return Request.CreateResponse(HttpStatusCode.OK, studentView);
                 }
                 else
@@ -108,13 +85,7 @@ namespace Unios.WebApi.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> PostAsync([FromBody] StudentInputModel value)
         {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<StudentInputModel, IStudent>();
-                cfg.CreateMap<IStudent, StudentViewModel>();
-            });
-            var mapper = new Mapper(config);
-
-            var student = mapper.Map<IStudent>(value);
+            var student = Mapper.Map<IStudent>(value);
             student.StudentID = Guid.NewGuid();
 
             try
@@ -127,7 +98,7 @@ namespace Unios.WebApi.Controllers
                 }
                 else
                 {
-                    var studentView = mapper.Map<StudentViewModel>(serviceResult);
+                    var studentView = Mapper.Map<StudentViewModel>(serviceResult);
                     return Request.CreateResponse(HttpStatusCode.OK, studentView);
                 }
             }
@@ -140,13 +111,7 @@ namespace Unios.WebApi.Controllers
         [HttpPut]
         public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] StudentInputModel value)
         {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<StudentInputModel, IStudent>();
-                cfg.CreateMap<IStudent, StudentViewModel>();
-            });
-            var mapper = new Mapper(config);
-
-            var student = mapper.Map<IStudent>(value);
+            var student = Mapper.Map<IStudent>(value);
             student.StudentID = id;
 
             try
@@ -162,7 +127,7 @@ namespace Unios.WebApi.Controllers
                 }
                 else
                 {
-                    var studentView = mapper.Map<StudentViewModel>(serviceResult);
+                    var studentView = Mapper.Map<StudentViewModel>(serviceResult);
                     return Request.CreateResponse(HttpStatusCode.OK, studentView);
                 }
             }

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Configuration;
-using Unios.Model;
 using Unios.Model.Common;
 using Unios.Repository.Common;
 using Unios.Repository.Entities;
@@ -16,15 +15,17 @@ namespace Unios.Repository
     {
         private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         private readonly SqlConnection Connection = new SqlConnection(_connectionString);
-        
+        private readonly IMapper Mapper;
+
+        public StudentRepository(IMapper mapper)
+        {
+            Mapper = mapper;
+        }
+
 
         public async Task<IStudent> AddAsync(IStudent student)
         {
-            var config = new MapperConfiguration(cfg =>
-                cfg.CreateMap<IStudent, StudentEntity>()
-            );
-            var mapper = new Mapper(config);
-            var studentEntity = mapper.Map<StudentEntity>(student);
+            var studentEntity = Mapper.Map<StudentEntity>(student);
 
             string nonQueryString =
                 "INSERT INTO Student VALUES ('" +
@@ -53,7 +54,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<int> CountAsync(StudentFilteringParams filteringParams)
+        public async Task<int> CountAsync(IStudentFilteringParams filteringParams)
         {
             string queryString =
                 "SELECT COUNT(*) " +
@@ -105,9 +106,9 @@ namespace Unios.Repository
 
 
         public async Task<List<IStudent>> FindAsync(
-            StudentFilteringParams filteringParams,
-            StudentSortingParams sortingParams,
-            PaginationParams paginationParams
+            IStudentFilteringParams filteringParams,
+            IStudentSortingParams sortingParams,
+            IPaginationParams paginationParams
         )
         {
             List<IStudent> storage = new List<IStudent>();
@@ -122,12 +123,8 @@ namespace Unios.Repository
 
             string filterString = GenerateFilterString(filteringParams);
             queryString += filterString;
-
-            if (!sortingParams.IsNull())
-            {
-                queryString += " ORDER BY " + sortingParams.SortBy + " " + sortingParams.SortOrder.ToUpper();
-            }
-
+            queryString += " ORDER BY " + sortingParams.SortBy + " " + sortingParams.SortOrder.ToUpper();
+            
             string paginationString = paginationParams.GeneratePaginationString("end");
             queryString += paginationString;
 
@@ -138,7 +135,7 @@ namespace Unios.Repository
 
             while (dataReader.Read())
             {
-                IStudent student = new Student (
+                StudentEntity studentEntity = new StudentEntity(
                     Guid.Parse(dataReader[0].ToString()),
                     dataReader[1].ToString(),
                     dataReader[2].ToString(),
@@ -146,7 +143,7 @@ namespace Unios.Repository
                     int.Parse(dataReader[4].ToString())
                 );
 
-                storage.Add(student);
+                storage.Add(Mapper.Map<IStudent>(studentEntity));
             }
 
             Connection.Close();
@@ -157,8 +154,6 @@ namespace Unios.Repository
 
         public async Task<IStudent> GetAsync(Guid id)
         {
-            IStudent student;
-
             string queryString =
                 "SELECT StudentID, Ime, Prezime, Naziv, Godina " +
                 "FROM Student JOIN Fakultet " +
@@ -172,7 +167,7 @@ namespace Unios.Repository
 
             if (dataReader.Read())
             {
-                student = new Student(
+                StudentEntity studentEntity = new StudentEntity(
                     Guid.Parse(dataReader[0].ToString()),
                     dataReader[1].ToString(),
                     dataReader[2].ToString(),
@@ -181,7 +176,7 @@ namespace Unios.Repository
                 );
 
                 Connection.Close();
-                return student;
+                return Mapper.Map<IStudent>(studentEntity);
             }
             else
             {
@@ -193,11 +188,7 @@ namespace Unios.Repository
 
         public async Task<IStudent> UpdateAsync(IStudent student)
         {
-            var config = new MapperConfiguration(cfg =>
-                cfg.CreateMap<IStudent, StudentEntity>()
-            );
-            var mapper = new Mapper(config);
-            var studentEntity = mapper.Map<StudentEntity>(student);
+            var studentEntity = Mapper.Map<StudentEntity>(student);
 
             string nonQueryString =
                 "UPDATE Student " +
@@ -251,7 +242,7 @@ namespace Unios.Repository
         }
 
 
-        private string GenerateFilterString(StudentFilteringParams filteringParams)
+        private string GenerateFilterString(IStudentFilteringParams filteringParams)
         {
             string filterString = "";
             int counter = 0;

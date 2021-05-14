@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using Unios.Service.Common;
 
-namespace Unios.Service
+namespace Unios.Service.Modules
 {
-    public class DIModule : Module
+    public class ServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

@@ -26,11 +26,6 @@ namespace Unios.Service
             return null;
         }
 
-        public async Task<int> CountAsync(FakultetFilteringParams filteringParams)
-        {
-            return await Repository.CountAsync(filteringParams);
-        }
-
         public async Task<int> DeleteAsync(Guid id)
         {
             if (await Repository.GetAsync(id) == null)
@@ -41,11 +36,14 @@ namespace Unios.Service
         }
 
         public async Task<List<IFakultet>> FindAsync(
-            FakultetFilteringParams filteringParams,
-            FakultetSortingParams sortingParams,
-            PaginationParams paginationParams
+            IFakultetFilteringParams filteringParams,
+            IFakultetSortingParams sortingParams,
+            IPaginationParams paginationParams
         )
         {
+            int totalItems = await Repository.CountAsync(filteringParams);
+            paginationParams.SetTotalItems(totalItems);
+
             return await Repository.FindAsync(filteringParams, sortingParams, paginationParams);
         }
 

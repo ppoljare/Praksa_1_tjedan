@@ -2,7 +2,7 @@
 
 namespace Unios.Common
 {
-    public class StudentFilteringParams
+    public class StudentFilteringParams : IStudentFilteringParams
     {
         public string Ime { get; set; }
         public string Prezime { get; set; }

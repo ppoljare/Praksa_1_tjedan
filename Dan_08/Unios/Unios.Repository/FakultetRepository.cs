@@ -5,7 +5,6 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Unios.Common;
-using Unios.Model;
 using Unios.Model.Common;
 using Unios.Repository.Common;
 using Unios.Repository.Entities;
@@ -16,15 +15,17 @@ namespace Unios.Repository
     {
         private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         private readonly SqlConnection Connection = new SqlConnection(_connectionString);
+        private readonly IMapper Mapper;
+
+        public FakultetRepository(IMapper mapper)
+        {
+            Mapper = mapper;
+        }
 
 
         public async Task<IFakultet> AddAsync(IFakultet fakultet)
         {
-            var config = new MapperConfiguration(cfg =>
-                cfg.CreateMap<IFakultet, FakultetEntity>()
-            );
-            var mapper = new Mapper(config);
-            var fakultetEntity = mapper.Map<FakultetEntity>(fakultet);
+            var fakultetEntity = Mapper.Map<FakultetEntity>(fakultet);
 
             string nonQueryString =
                 "INSERT INTO Fakultet VALUES ('" +
@@ -49,7 +50,7 @@ namespace Unios.Repository
         }
 
 
-        public async Task<int> CountAsync(FakultetFilteringParams filteringParams)
+        public async Task<int> CountAsync(IFakultetFilteringParams filteringParams)
         {
             string queryString =
                 "SELECT COUNT(*) " +
@@ -100,16 +101,11 @@ namespace Unios.Repository
 
 
         public async Task<List<IFakultet>> FindAsync(
-            FakultetFilteringParams filteringParams,
-            FakultetSortingParams sortingParams,
-            PaginationParams paginationParams
+            IFakultetFilteringParams filteringParams,
+            IFakultetSortingParams sortingParams,
+            IPaginationParams paginationParams
         )
         {
-            var config = new MapperConfiguration(cfg =>
-                cfg.CreateMap<FakultetEntity, IFakultet>()
-            );
-            var mapper = new Mapper(config);
-            
             List<FakultetEntity> storage = new List<FakultetEntity>();
 
             string queryString = "SELECT";
@@ -121,11 +117,7 @@ namespace Unios.Repository
 
             string filterString = GenerateFilterString(filteringParams);
             queryString += filterString;
-
-            if (!sortingParams.IsNull())
-            {
-                queryString += " ORDER BY " + sortingParams.SortBy + " " + sortingParams.SortOrder.ToUpper();
-            }
+            queryString += " ORDER BY " + sortingParams.SortBy + " " + sortingParams.SortOrder.ToUpper();
 
             string paginationString = paginationParams.GeneratePaginationString("end");
             queryString += paginationString;
@@ -147,21 +139,15 @@ namespace Unios.Repository
             }
 
             Connection.Close();
-            var result = mapper.Map<List<IFakultet>>(storage);
+            var result = Mapper.Map<List<IFakultet>>(storage);
             return result;
         }
 
 
         public async Task<IFakultet> GetAsync(Guid id)
         {
-            var config = new MapperConfiguration(cfg =>
-                cfg.CreateMap<FakultetEntity, IFakultet>()
-            );
-            var mapper = new Mapper(config);
-
             FakultetEntity fakultetEntity;
-            IStudent student;
-
+            
             string queryString1 =
                 "SELECT FakultetID, Naziv, Vrsta " +
                 "FROM Fakultet " +
@@ -187,7 +173,7 @@ namespace Unios.Repository
 
             Connection.Close();
 
-            var fakultet = mapper.Map<IFakultet>(fakultetEntity);
+            var fakultet = Mapper.Map<IFakultet>(fakultetEntity);
             fakultet.Studenti = new List<IStudent>();
 
             string queryString2 =
@@ -203,7 +189,7 @@ namespace Unios.Repository
 
             while (dataReader2.Read())
             {
-                student = new Student(
+                StudentEntity studentEntity = new StudentEntity(
                     Guid.Parse(dataReader2[0].ToString()),
                     dataReader2[1].ToString(),
                     dataReader2[2].ToString(),
@@ -211,7 +197,7 @@ namespace Unios.Repository
                     int.Parse(dataReader2[4].ToString())
                 );
 
-                fakultet.Studenti.Add(student);
+                fakultet.Studenti.Add(Mapper.Map<IStudent>(studentEntity));
             }
 
             Connection.Close();
@@ -251,7 +237,7 @@ namespace Unios.Repository
         }
 
 
-        private string GenerateFilterString(FakultetFilteringParams filteringParams)
+        private string GenerateFilterString(IFakultetFilteringParams filteringParams)
         {
             string filterString = "";
             int counter = 0;

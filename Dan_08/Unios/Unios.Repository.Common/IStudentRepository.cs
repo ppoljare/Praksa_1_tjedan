@@ -9,12 +9,12 @@ namespace Unios.Repository.Common
     public interface IStudentRepository
     {
         Task<IStudent> AddAsync(IStudent student);
-        Task<int> CountAsync(StudentFilteringParams filteringParams);
+        Task<int> CountAsync(IStudentFilteringParams filteringParams);
         Task<int> DeleteAsync(Guid id);
         Task<List<IStudent>> FindAsync(
-            StudentFilteringParams filteringParams,
-            StudentSortingParams sortingParams,
-            PaginationParams paginationParams
+            IStudentFilteringParams filteringParams,
+            IStudentSortingParams sortingParams,
+            IPaginationParams paginationParams
         );
         Task<IStudent> GetAsync(Guid id);
         Task<IStudent> UpdateAsync(IStudent student);

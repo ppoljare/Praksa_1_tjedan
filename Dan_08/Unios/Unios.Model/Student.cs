@@ -12,15 +12,5 @@ namespace Unios.Model
         public string Fakultet { get; set; }
         public int Godina { get; set; }
         public bool Found { get; set; }
-
-        public Student(Guid id, string ime, string prezime, string fakultet, int godina)
-        {
-            StudentID = id;
-            Ime = ime;
-            Prezime = prezime;
-            Fakultet = fakultet;
-            Godina = godina;
-            Found = true;
-        }
     }
 }

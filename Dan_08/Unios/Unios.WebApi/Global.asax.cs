@@ -11,8 +11,9 @@ namespace Unios.WebApi
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
             var container = ContainerConfig.Configure();
-            
-            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            var config = GlobalConfiguration.Configuration;
+
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
     }
 }

@@ -89,7 +89,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DIModule.cs" />
+    <Compile Include="Modules\RepositoryModule.cs" />
     <Compile Include="Entities\FakultetEntity.cs" />
     <Compile Include="Entities\StudentEntity.cs" />
     <Compile Include="FakultetRepository.cs" />

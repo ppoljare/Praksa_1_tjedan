@@ -2,16 +2,21 @@
 
 namespace Unios.Common
 {
-    public class FakultetSortingParams
+    public class FakultetSortingParams : IFakultetSortingParams
     {
         public string SortBy { get; set; }
         public string SortOrder { get; set; }
 
         public bool IsValid()
         {
-            if (IsNull())
+            if (SortBy == null)
             {
-                return true;
+                SortBy = "Naziv";
+            }
+
+            if (SortOrder == null)
+            {
+                SortOrder = "asc";
             }
 
             switch (SortOrder)
@@ -35,11 +40,6 @@ namespace Unios.Common
             }
 
             return true;
-        }
-
-        public bool IsNull()
-        {
-            return SortBy == null && SortOrder == null;
         }
     }
 }

@@ -12,8 +12,9 @@ namespace Unios.WebApi
 
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            builder.RegisterModule<Service.DIModule>();
-            builder.RegisterModule<Repository.DIModule>();
+            builder.RegisterModule(new Modules.AutoMapperModule());
+            builder.RegisterModule(new Service.Modules.ServiceModule());
+            builder.RegisterModule(new Repository.Modules.RepositoryModule());
 
             return builder.Build();
         }
