@@ -1,0 +1,33 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.movie-table {
+    width: 50%;
+    border: 1px solid white;
+}
+
+.movie-table > tr > th {
+    text-align: left;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid white;
+    font-size: 40px;
+}
+
+.movie-table > tr > td {
+    text-align: left;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid white;
+}
+
