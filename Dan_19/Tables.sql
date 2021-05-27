@@ -1,0 +1,12 @@
+DROP TABLE Movie;
+GO
+
+
+CREATE TABLE Movie (
+	MovieId       UNIQUEIDENTIFIER PRIMARY KEY,
+	Name          VARCHAR(50) NOT NULL,
+	Genre         VARCHAR(50) NOT NULL,
+	YearReleased  INTEGER NOT NULL
+);
+
+GO
