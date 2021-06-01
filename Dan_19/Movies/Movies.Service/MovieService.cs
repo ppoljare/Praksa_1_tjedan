@@ -19,6 +19,11 @@ namespace Movies.Service
 
         public async Task<IMovie> AddAsync(IMovie movie)
         {
+            if (!IsDataValid(movie))
+            {
+                return null;
+            }
+
             if (await Repository.GetByIdAsync(movie.MovieId) == null)
             {
                 movie.Found = false;
@@ -49,6 +54,11 @@ namespace Movies.Service
 
         public async Task<IMovie> UpdateAsync(IMovie movie)
         {
+            if (!IsDataValid(movie))
+            {
+                return null;
+            }
+
             if (await Repository.GetByIdAsync(movie.MovieId) == null)
             {
                 movie.Found = false;
@@ -61,6 +71,26 @@ namespace Movies.Service
         public void InitMovie(IMovie movie)
         {
             movie.MovieId = Guid.NewGuid();
+        }
+
+        private bool IsDataValid(IMovie movie)
+        {
+            if (movie.Name.Length < 1 || movie.Name.Length > 50)
+            {
+                return false;
+            }
+
+            if (movie.Genre.Length < 1 || movie.Genre.Length > 50)
+            {
+                return false;
+            }
+
+            if (movie.YearReleased <= 0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

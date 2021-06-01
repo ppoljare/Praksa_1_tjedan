@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Button, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
+import { Link } from "react-router-dom";
+import { Button, Table } from "reactstrap";
 import axios from "axios";
 import { action, makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
@@ -10,166 +11,55 @@ const MovieList = observer(
     movies = [];
     sortBy;
     sortOrder;
-    newMovieModal = false;
-    newMovieData = { Name: '', Genre: '', YearReleased: '' };
-    editMovieModal = false;
-    editMovieData = { MovieId: '', Name: '', Genre: '', YearReleased: '' };
     
     constructor(props) {
       super(props);
       
-      this.sortBy = this.props.sortBy;
-      if (this.sortBy === "") {
+      let location = this.props.location;
+      
+      this.sortBy = location.sortBy;
+      if (this.sortBy === "" || this.sortBy === undefined) {
         this.sortBy = "Name";
       }
       
-      this.sortOrder = this.props.sortOrder;
-      if (this.sortOrder === "") {
+      this.sortOrder = location.sortOrder;
+      if (this.sortOrder === "" || this.sortOrder === undefined) {
         this.sortOrder = "asc";
       }
-      
-      this.newMovieModal = false;
-      this.newMovieData = { Name: '', Genre: '', YearReleased: '' };
-      this.editMovieModal = false;
-      this.editMovieData = { MovieId: '', Name: '', Genre: '', YearReleased: '' };
       
       makeObservable(this, {
         movies: observable,
         sortBy: observable,
         sortOrder: observable,
-        newMovieModal: observable,
-        newMovieData: observable,
-        editMovieModal: observable,
-        editMovieData: observable,
-        addMovie: action,
-        editMovie: action,
         deleteMovie: action,
         getMovies: action,
-        updateMovie: action,
         changeSortParams: action,
-        _setMovies: action,
-        _setNewMovieModal: action,
-        _setNewMovieData: action,
-        _setEditMovieModal: action,
-        _setEditMovieData: action,
-        _setEditMovieDataAll: action
+        setMovies: action
       })
-    }
-    
-    toggleNewMovieModal = () => {
-      this._setNewMovieModal(!this.newMovieModal);
-    }
-    
-    toggleEditMovieModal = () => {
-      this._setEditMovieModal(!this.editMovieModal);
     }
     
     async componentDidMount() {
       await this.getMovies();
     }
     
-    async addMovie() {
-      await axios.post(this.movieApi, this.newMovieData).then((response) => {
-        this.getMovies();
-        this._setNewMovieModal(false);
-        this._setNewMovieData({
-          Name: '',
-          Genre: '',
-          YearReleased: ''
-        });
-      });
-    }
-    
     async deleteMovie(id) {
-      await axios.delete(this.movieApi + id).then((response) => {
-        this.getMovies();
-      });
-    }
-    
-    editMovie(id, name, genre, year) {
-      this._setEditMovieModal(!this.editMovieModal);
-      this._setEditMovieDataAll({
-        MovieId: id,
-        Name: name,
-        Genre: genre,
-        YearReleased: year
-      });
+      if (window.confirm("Are you sure you want to delete this movie?")) {
+        await axios.delete(this.movieApi + id).then((response) => {
+          this.getMovies();
+        });
+      }
     }
     
     async getMovies() {
-      let sortBy = this.sortBy;
-      let sortOrder = this.sortOrder;
-      await axios.get(this.movieApi + "?SortBy=" + sortBy + "&SortOrder=" + sortOrder).then((response) => {
-        this._setMovies(response.data);
-      });
-    }
-    
-    async updateMovie() {
-      let { Name, Genre, YearReleased } = this.editMovieData;
-      await axios.put(this.movieApi + this.editMovieData.MovieId, {
-        Name, Genre, YearReleased
-      }).then((response) => {
-        this.getMovies();
-      })
+      let sortingParams = "SortBy=" + this.sortBy + "&SortOrder=" + this.sortOrder;
       
-      this._setEditMovieModal(false);
-      this._setEditMovieData({
-        MovieId: "",
-        Name: "",
-        Genre: "",
-        YearReleased: ""
+      await axios.get(this.movieApi + "?" + sortingParams).then((response) => {
+        this.setMovies(response.data);
       });
     }
     
-    _setMovies(data) {
+    setMovies(data) {
       this.movies = data;
-    }
-    
-    _setNewMovieModal(value) {
-      this.newMovieModal = value;
-    }
-    
-    _setEditMovieModal(value) {
-      this.editMovieModal = value;
-    }
-    
-    _setNewMovieData(property, value) {
-      switch(property) {
-        case "Name":
-          this.newMovieData.Name = value;
-          break;
-        case "Genre":
-          this.newMovieData.Genre = value;
-          break;
-        case "YearReleased":
-          this.newMovieData.YearReleased = value;
-          break;
-        default:
-          break;
-      }
-    }
-    
-    _setEditMovieData(property, value) {
-      switch(property) {
-        case "MovieId":
-          this.editMovieData.MovieId = value;
-          break;
-        case "Name":
-          this.editMovieData.Name = value;
-          break;
-        case "Genre":
-          this.editMovieData.Genre = value;
-          break;
-        case "YearReleased":
-          this.editMovieData.YearReleased = value;
-          break;
-        default:
-          break;
-      }
-    }
-    
-    _setEditMovieDataAll(value) {
-      this.editMovieData = value;
     }
     
     changeSortParams = async (sortBy) => {
@@ -193,7 +83,17 @@ const MovieList = observer(
             <td>{movie.Genre}</td>
             <td>{movie.YearReleased}</td>
             <td>
-              <Button color="success" size="sm" onClick={() => this.editMovie(movie.MovieId, movie.Name, movie.Genre, movie.YearReleased)}>Edit</Button>
+              <Link to={{
+                pathname: "/edit/" + movie.MovieId,
+                movie: {
+                  Name: movie.Name,
+                  Genre: movie.Genre,
+                  YearReleased: movie.YearReleased
+                }
+              }}>
+                <Button color="success" size="sm">Edit</Button>
+              </Link>
+              
               <Button className="mx-2" color="danger" size="sm" onClick={() => this.deleteMovie(movie.MovieId)}>Delete</Button>
             </td>
           </tr>
@@ -202,71 +102,11 @@ const MovieList = observer(
       
       return (
         <>
-          <Button className="my-3" color="primary" onClick={() => this.toggleNewMovieModal()}>New movie</Button>
+          <h1 className="my-3">Movies App</h1>
           
-          <Modal isOpen={this.newMovieModal} toggle={() => this.toggleNewMovieModal()}>
-            <ModalHeader toggle={() => this.toggleNewMovieModal()}>Add a new movie</ModalHeader>
-            
-            <ModalBody>
-              <FormGroup>
-                <Label for="name">Name</Label>
-                <Input id="name" value={this.newMovieData.Name} onChange={(e) => {
-                  this._setNewMovieData("Name", e.target.value);
-                }} />
-              </FormGroup>
-              
-              <FormGroup>
-                <Label for="genre">Genre</Label>
-                <Input id="genre" value={this.newMovieData.Genre} onChange={(e) => {
-                  this._setNewMovieData("Genre", e.target.value);
-                }} />
-              </FormGroup>
-              
-              <FormGroup>
-                <Label for="year">Year</Label>
-                <Input id="year" value={this.newMovieData.YearReleased} onChange={(e) => {
-                  this._setNewMovieData("YearReleased", e.target.value);
-                }} />
-              </FormGroup>
-            </ModalBody>
-            
-            <ModalFooter>
-              <Button color="primary" onClick={() => this.addMovie()}>Add</Button>{' '}
-              <Button color="secondary" onClick={() => this.toggleNewMovieModal()}>Cancel</Button>
-            </ModalFooter>
-          </Modal>
-          
-          <Modal isOpen={this.editMovieModal} toggle={() => this.toggleEditMovieModal()}>
-            <ModalHeader toggle={() => this.toggleEditMovieModal()}>Update movie info</ModalHeader>
-            
-            <ModalBody>
-              <FormGroup>
-                <Label for="name">Name</Label>
-                <Input id="name" value={this.editMovieData.Name} onChange={(e) => {
-                  this._setEditMovieData("Name", e.target.value);
-                }} />
-              </FormGroup>
-              
-              <FormGroup>
-                <Label for="genre">Genre</Label>
-                <Input id="genre" value={this.editMovieData.Genre} onChange={(e) => {
-                  this._setEditMovieData("Genre", e.target.value);
-                }} />
-              </FormGroup>
-              
-              <FormGroup>
-                <Label for="year">Year</Label>
-                <Input id="year" value={this.editMovieData.YearReleased} onChange={(e) => {
-                  this._setEditMovieData("YearReleased", e.target.value);
-                }} />
-              </FormGroup>
-            </ModalBody>
-            
-            <ModalFooter>
-              <Button color="primary" onClick={() => this.updateMovie()}>Update</Button>{' '}
-              <Button color="secondary" onClick={() => this.toggleEditMovieModal()}>Cancel</Button>
-            </ModalFooter>
-          </Modal>
+          <Link to="/new">
+            <Button className="my-3" color="primary">New movie</Button>
+          </Link>
           
           <Table>
             <thead>
