@@ -1,40 +1,69 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Table } from "reactstrap";
+import { Button, Input, Table, Pagination, PaginationItem, FormGroup, Label } from "reactstrap";
 import axios from "axios";
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 
 const MovieList = observer(
   class MovieList extends Component {
     movieApi = "https://localhost:44354/api/movie/";
     movies = [];
-    sortBy;
-    sortOrder;
     
+    filteringParams;
+    sortingParams;
+    pagingParams;
+    
+    /******************************** CONSTRUCTOR *******************************/
     constructor(props) {
       super(props);
       
       let location = this.props.location;
       
-      this.sortBy = location.sortBy;
-      if (this.sortBy === "" || this.sortBy === undefined) {
-        this.sortBy = "Name";
+      this.filteringParams = location.filteringParams;
+      this.sortingParams = location.sortingParams;
+      this.pagingParams = location.pagingParams;
+      
+      if (this.filteringParams === undefined) {
+        this.filteringParams = {
+          Name: "",
+          Genre: "",
+          YearLowerBound: "",
+          YearUpperBound: ""
+        };
       }
       
-      this.sortOrder = location.sortOrder;
-      if (this.sortOrder === "" || this.sortOrder === undefined) {
-        this.sortOrder = "asc";
+      if (this.sortingParams === undefined) {
+        this.sortingParams = {
+          SortBy: "Name",
+          SortOrder: "asc"
+        };
+      }
+      
+      if (this.pagingParams === undefined) {
+        this.pagingParams = {
+          ItemsPerPage: 10,
+          PageNumber: 1,
+          TotalItems: 0
+        }
       }
       
       makeObservable(this, {
         movies: observable,
-        sortBy: observable,
-        sortOrder: observable,
         deleteMovie: action,
         getMovies: action,
-        changeSortParams: action,
-        setMovies: action
+        setMovies: action,
+        
+        filteringParams: observable,
+        sortingParams: observable,
+        pagingParams: observable,
+        
+        changeFilteringParams: action,
+        changeSortingParams: action,
+        changePagingParams: action,
+        
+        setTotalItems: action,
+        totalPages: computed
       })
     }
     
@@ -42,6 +71,7 @@ const MovieList = observer(
       await this.getMovies();
     }
     
+    /****************************** CRUD OPERATIONS *****************************/
     async deleteMovie(id) {
       if (window.confirm("Are you sure you want to delete this movie?")) {
         await axios.delete(this.movieApi + id).then((response) => {
@@ -51,10 +81,21 @@ const MovieList = observer(
     }
     
     async getMovies() {
-      let sortingParams = "SortBy=" + this.sortBy + "&SortOrder=" + this.sortOrder;
+      let filteringParams = this.generateFilteringString();
+      let sortingParams = "SortBy=" + this.sortingParams.SortBy + "&SortOrder=" + this.sortingParams.SortOrder;
+      let pagingParams = "ItemsPerPage=" + this.pagingParams.ItemsPerPage + "&Page=" + this.pagingParams.PageNumber;
       
-      await axios.get(this.movieApi + "?" + sortingParams).then((response) => {
-        this.setMovies(response.data);
+      let queryString = this.movieApi + "?";
+      
+      if (filteringParams !== "") {
+        queryString += filteringParams + "&";
+      }
+      
+      queryString += sortingParams + "&" + pagingParams;
+      
+      await axios.get(queryString).then((response) => {
+        this.setMovies(response.data.m_Item1);
+        this.setTotalItems(response.data.m_Item2);
       });
     }
     
@@ -62,19 +103,89 @@ const MovieList = observer(
       this.movies = data;
     }
     
-    changeSortParams = async (sortBy) => {
-      if (this.sortBy === sortBy){
-        if (this.sortOrder.toLowerCase() === "asc") {
-          this.sortOrder = "desc";
-        } else {
-          this.sortOrder = "asc";
-        }
-      } else {
-        this.sortBy = sortBy;
+    /************************ FILTERING, SORTING, PAGING ************************/
+    changeFilteringParams = async(filterBy, value) => {
+      switch (filterBy) {
+        case "Name":
+          this.filteringParams.Name = value;
+          break;
+        case "Genre":
+          this.filteringParams.Genre = value;
+          break;
+        case "YearLowerBound":
+          this.filteringParams.YearLowerBound = value;
+          break;
+        case "YearUpperBound":
+          this.filteringParams.YearUpperBound = value;
+          break;
+        default:
+          break;
       }
       await this.getMovies();
     };
+    
+    changeSortingParams = async (sortBy) => {
+      if (this.sortingParams.SortBy === sortBy){
+        if (this.sortingParams.SortOrder.toLowerCase() === "asc") {
+          this.sortingParams.SortOrder = "desc";
+        } else {
+          this.sortingParams.SortOrder = "asc";
+        }
+      } else {
+        this.sortingParams.SortBy = sortBy;
+      }
+      await this.getMovies();
+    };
+    
+    changePagingParams = async (itemToChange, value) => {
+      switch (itemToChange) {
+        case "ItemsPerPage":
+          this.pagingParams.ItemsPerPage = value;
+          break;
+        case "PageNumber":
+          this.pagingParams.PageNumber = value;
+          break;
+        default:
+          break;
+      }
+      await this.getMovies();
+    }
+    
+    setTotalItems(value) {
+      this.pagingParams.TotalItems = value;
+    }
+    
+    get totalPages() {
+      if (this.pagingParams.ItemsPerPage === 0 || this.pagingParams.ItemsPerPage === "") {
+        return 0;
+      }
+      return Math.ceil(this.pagingParams.TotalItems / this.pagingParams.ItemsPerPage);
+    }
 
+    generateFilteringString() {
+      let filteringString = "";
+      let params = this.filteringParams;
+      
+      if (params.Name !== "") {
+        filteringString += "&Name=" + params.Name;
+      }
+      
+      if (params.Genre !== "") {
+        filteringString += "&Genre=" + params.Genre;
+      }
+      
+      if (params.YearLowerBound !== 0) {
+        filteringString += "&YearLowerBound=" + params.YearLowerBound;
+      }
+      
+      if (params.YearUpperBound !== 0) {
+        filteringString += "&YearUpperBound=" + params.YearUpperBound;
+      }
+      
+      return filteringString;
+    }
+    
+    /********************************** RENDER **********************************/
     render() {
       let movies = this.movies.map((movie) => {
         return (
@@ -100,6 +211,24 @@ const MovieList = observer(
         );
       });
       
+      let pageNumbers = Array.from({length: this.totalPages}, (x, i) => i+1);
+      
+      let pageButtons = pageNumbers.map((page) => {
+        if (page === this.pagingParams.PageNumber) {
+          return (
+            <PaginationItem key={page}>
+              <Button color="primary">{page}</Button>
+            </PaginationItem> 
+          );
+        } else {
+          return (
+            <PaginationItem key={page}>
+              <Button color="white" onClick={() => this.changePagingParams("PageNumber", page)}>{page}</Button>
+            </PaginationItem> 
+          );
+        }
+      });
+      
       return (
         <>
           <h1 className="my-3">Movies App</h1>
@@ -113,20 +242,32 @@ const MovieList = observer(
               <tr>
                 <th>
                   <div>
+                    <Input placeholder="Name" id="name" value={this.filteringParams.Name} onChange={(e) => {
+                      this.changeFilteringParams("Name", e.target.value);
+                    }} />
                     Name
-                    <Button className="mx-1" color="white" size="sm" onClick={() => this.changeSortParams("Name")}>Sort</Button>
+                    <Button className="mx-1" color="white" size="sm" onClick={() => this.changeSortingParams("Name")}>Sort</Button>
                   </div>
                 </th>
                 <th>
                   <div>
+                    <Input placeholder="Genre" id="genre" value={this.filteringParams.Genre} onChange={(e) => {
+                      this.changeFilteringParams("Genre", e.target.value);
+                    }} />
                     Genre
-                    <Button className="mx-1" color="white" size="sm" onClick={() => this.changeSortParams("Genre")}>Sort</Button>
+                    <Button className="mx-1" color="white" size="sm" onClick={() => this.changeSortingParams("Genre")}>Sort</Button>
                   </div>
                 </th>
                 <th>
                   <div>
+                    <Input placeholder="Year min" id="yearLowerBound" type="number" value={this.filteringParams.YearLowerBound} onChange={(e) => {
+                      this.changeFilteringParams("YearLowerBound", e.target.value);
+                    }} />
+                    <Input placeholder="Year max" id="yearUpperBound" type="number" value={this.filteringParams.YearUpperBound} onChange={(e) => {
+                      this.changeFilteringParams("YearUpperBound", e.target.value);
+                    }} />
                     Year
-                    <Button className="mx-1" color="white" size="sm" onClick={() => this.changeSortParams("YearReleased")}>Sort</Button>
+                    <Button className="mx-1" color="white" size="sm" onClick={() => this.changeSortingParams("YearReleased")}>Sort</Button>
                   </div>
                 </th>
                 <th>Actions</th>
@@ -137,6 +278,18 @@ const MovieList = observer(
               {movies}
             </tbody>
           </Table>
+          
+          <Pagination>
+            {pageButtons}
+          </Pagination>
+          
+          <FormGroup>
+            <Label for="itemsPerPage">Items per page</Label>
+              <Input id="itemsPerPage" type="number" value={this.pagingParams.ItemsPerPage} onChange={(e) => {
+              this.changePagingParams("ItemsPerPage", e.target.value);
+            }} />
+          </FormGroup>
+          
         </>
       );
     }

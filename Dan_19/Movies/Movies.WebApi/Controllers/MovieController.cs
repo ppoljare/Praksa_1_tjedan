@@ -60,7 +60,8 @@ namespace Movies.WebApi.Controllers
             }
 
             var moviesView = Mapper.Map<List<MovieViewModel>>(serviceResult);
-            return Request.CreateResponse(HttpStatusCode.OK, moviesView);
+            Tuple<List<MovieViewModel>, int> result = new Tuple<List<MovieViewModel>, int>(moviesView, paginationParams.TotalItems);
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         [HttpGet]
